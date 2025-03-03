@@ -8,7 +8,9 @@ package com.exsaw.composeplayground.tool
 
 import android.view.View
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Indication
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -54,6 +56,8 @@ fun Modifier.debouncedClickable(
     debounceTime: Long = DEFAULT_CLICK_DEBOUNCE_TIME,
     isVibrateOnBlockedState: Boolean = true,
     actionOnLongClick: (() -> Unit)? = null,
+    interactionSource: MutableInteractionSource? = null,
+    indication: Indication? = null,
     action: (() -> Unit)? = null,
 ): Modifier = composed {
     val coroutineScope = rememberCoroutineScope()
@@ -81,6 +85,8 @@ fun Modifier.debouncedClickable(
         enabled = action != null || actionOnLongClick != null,
         onClick = { debouncedActionOnClick?.invoke() },
         onLongClick = { debouncedActionOnLongClick?.invoke() },
+        indication = indication,
+        interactionSource = interactionSource,
     )
 }
 

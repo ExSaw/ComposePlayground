@@ -1,10 +1,12 @@
 package com.exsaw.composeplayground.basic_layout.bottom_nav
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Badge
@@ -27,6 +29,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.exsaw.composeplayground.R
@@ -42,106 +45,108 @@ fun BottomNavDemo1(modifier: Modifier = Modifier) {
     var selectedItemIndex by rememberSaveable {
         mutableIntStateOf(0)
     }
-    Scaffold(
-        bottomBar = {
-            NavigationBar(
-                containerColor = Color.White,
-                modifier = modifier
-                    .height(100.dp)
-                    .fillMaxWidth(),
-
+    Box(
+        modifier = modifier,
+    ) {
+        NavigationBar(
+            containerColor = Color.White,
+            modifier = modifier
+                .height(65.dp)
+                .fillMaxWidth(),
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceEvenly
             ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                )
-                {
-                    BottomNavItemsData.bottomNavItemsDataDefault.forEach { item ->
-                        Row(
-                            modifier = Modifier
-                                .weight(1f),
-                            verticalAlignment = Alignment.CenterVertically
+                BottomNavItemsData.bottomNavItemsDataDefault.forEach { item ->
+                    Row(
+                        modifier = Modifier
+                            .weight(1f),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
                         ) {
-                            Column(
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center
-                            ) {
-                                this@NavigationBar.NavigationBarItem(
-                                    modifier = Modifier
-                                        .padding(0.dp),
-                                    selected = selectedItemIndex == item.index,
-                                    onClick = onDebouncedClick(rememberCoroutineScope()) {
-                                        selectedItemIndex = item.index
-                                        // navController.navigate(...)
-                                    },
-                                    icon = {
-                                        BadgedBox(
-                                            modifier = Modifier
-                                                .padding(0.dp),
-                                            badge = {
-                                                when {
-                                                    item.badgeCount != null -> {
-                                                        Badge {
-                                                            Text(
-                                                                text = item.badgeCount.toString(),
-                                                                fontSize = 12.nonScaledSp,
-                                                                lineHeight = 12.nonScaledSp,
-                                                            )
-                                                        }
-                                                    }
-                                                    item.hasNews -> {
-                                                        Badge()
+                            this@NavigationBar.NavigationBarItem(
+                                selected = selectedItemIndex == item.index,
+                                onClick = onDebouncedClick(rememberCoroutineScope()) {
+                                    selectedItemIndex = item.index
+                                    // navController.navigate(...)
+                                },
+                                icon = {
+                                    BadgedBox(
+                                        badge = {
+                                            when {
+                                                item.badgeCount != null -> {
+                                                    Badge {
+                                                        Text(
+                                                            text = item.badgeCount.toString(),
+                                                            fontSize = 10.nonScaledSp,
+                                                            lineHeight = 10.nonScaledSp,
+                                                        )
                                                     }
                                                 }
+
+                                                item.hasNews -> {
+                                                    Badge()
+                                                }
                                             }
-                                        ) {
-                                            Icon(
-                                                imageVector = ImageVector.vectorResource(item.icon),
-                                                contentDescription = item.title
-                                            )
                                         }
-                                    },
-                                    enabled = true,
-                                    label = {
-                                        Text(
-                                            text = item.title,
-                                            fontSize = 12.nonScaledSp,
-                                            lineHeight = 12.nonScaledSp,
+                                    ) {
+                                        Icon(
+                                            imageVector = ImageVector.vectorResource(item.icon),
+                                            contentDescription = item.title
                                         )
-                                    },
-                                    alwaysShowLabel = true,
-                                    colors = NavigationBarItemColors(
-                                        selectedIconColor = colorResource(R.color.blue_1),
-                                        selectedTextColor = colorResource(R.color.blue_1),
-                                        selectedIndicatorColor = Color.Unspecified,
-                                        unselectedIconColor = colorResource(R.color.gray_1),
-                                        unselectedTextColor = colorResource(R.color.gray_1),
-                                        disabledIconColor = colorResource(R.color.gray_1),
-                                        disabledTextColor = colorResource(R.color.gray_1)
-                                    ),
-                                )
-                            }
+                                    }
+                                },
+                                enabled = true,
+                                label = {
+                                    Text(
+                                        text = item.title,
+                                        maxLines = 1,
+                                        overflow = TextOverflow.Visible,
+                                        fontSize = 10.nonScaledSp,
+                                        lineHeight = 12.nonScaledSp,
+                                    )
+                                },
+                                alwaysShowLabel = true,
+                                colors = NavigationBarItemColors(
+                                    selectedIconColor = colorResource(R.color.blue_1),
+                                    selectedTextColor = colorResource(R.color.blue_1),
+                                    selectedIndicatorColor = Color.Unspecified,
+                                    unselectedIconColor = colorResource(R.color.gray_1),
+                                    unselectedTextColor = colorResource(R.color.gray_1),
+                                    disabledIconColor = colorResource(R.color.gray_1),
+                                    disabledTextColor = colorResource(R.color.gray_1)
+                                ),
+                            )
                         }
                     }
                 }
             }
         }
-    ) { paddingValues ->
-        Text(
-            modifier = Modifier
-                .padding(paddingValues)
-                .width(10.dp),
-            text = "12121",
-            fontSize = 12.nonScaledSp,
-            lineHeight = 12.nonScaledSp,
-        )
     }
+
+//    Scaffold(
+//        bottomBar = {
+//
+//        }
+//    ) { paddingValues ->
+//        Text(
+//            modifier = Modifier
+//                .padding(paddingValues)
+//                .width(10.dp),
+//            text = "12121",
+//            fontSize = 12.nonScaledSp,
+//            lineHeight = 12.nonScaledSp,
+//        )
+//    }
 }
 
 @Preview(
     showBackground = true,
     backgroundColor = 0xEFE,
-    showSystemUi = true,
     apiLevel = 33,
     fontScale = 2.0f,
 )
