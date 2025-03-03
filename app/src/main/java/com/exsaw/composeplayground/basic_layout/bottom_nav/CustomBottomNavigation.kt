@@ -1,5 +1,6 @@
 package com.exsaw.composeplayground.basic_layout.bottom_nav
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -19,6 +20,9 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -28,27 +32,23 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.exsaw.composeplayground.R
 import com.exsaw.composeplayground.di.mainModule
+import com.exsaw.composeplayground.tool.debouncedClickable
 import com.exsaw.composeplayground.ui.theme.ComposePlaygroundTheme
 import com.exsaw.composeplayground.util.nonScaledSp
 import org.koin.compose.KoinApplication
 
-@Composable
-fun MainScreen(modifier: Modifier = Modifier) {
-    Box(
-        modifier = modifier
-            .fillMaxSize(),
-        contentAlignment = Alignment.BottomCenter,
-    ) {
-        CustomBottomNav()
-    }
-}
 
 @Composable
-fun CustomBottomNav(modifier: Modifier = Modifier) {
+fun CustomBottomNav(
+    modifier: Modifier = Modifier,
+    itemsState: MutableState<List<BottomNavItemsData.BottomNavItem>>,
+    onClickItem: (BottomNavItemsData.BottomNavItem) -> Unit,
+) {
     Box(
         modifier
             .shadow(
@@ -67,13 +67,14 @@ fun CustomBottomNav(modifier: Modifier = Modifier) {
                 .height(65.dp)
                 .padding(top = 10.dp),
         ) {
-                BottomNavItemsData.bottomNavItemsDataDefault.forEach { item ->
-                    BottomNavButton(
-                        item = item,
-                        modifier = Modifier
-                            .weight(1f)
-                    )
-                }
+            itemsState.value.forEach { item ->
+                BottomNavButton(
+                    item = item,
+                    modifier = Modifier
+                        .weight(1f),
+                    onClick = onClickItem
+                )
+            }
         }
     }
 }
@@ -81,10 +82,12 @@ fun CustomBottomNav(modifier: Modifier = Modifier) {
 @Composable
 fun BottomNavButton(
     item: BottomNavItemsData.BottomNavItem,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: (BottomNavItemsData.BottomNavItem) -> Unit,
 ) {
     Column(
-        modifier = modifier,
+        modifier = modifier
+            .debouncedClickable { onClick(item) },
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
@@ -101,10 +104,10 @@ fun BottomNavButton(
                 contentDescription = item.title,
                 colorFilter = ColorFilter.tint(itemColor),
             )
-            if(item.hasNews) {
+            if (item.hasNews) {
                 Box(
-                    Modifier
-                        .offset(x = 16.dp,)
+                    modifier = Modifier
+                        .offset(x = 16.dp)
                         .size(8.dp)
                         .background(
                             color = Color.Red,
@@ -117,20 +120,24 @@ fun BottomNavButton(
         Spacer(Modifier.height(12.dp))
         Text(
             text = item.title,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
             fontSize = 10.nonScaledSp,
             lineHeight = 12.nonScaledSp,
+            letterSpacing = 1.nonScaledSp,
             color = itemColor
         )
     }
 }
 
+@SuppressLint("UnrememberedMutableState")
 @Preview(
     showBackground = true,
     backgroundColor = 0xEFE,
     showSystemUi = true,
     apiLevel = 33,
-    device = "id:pixel_4a",
-    fontScale = 2.0f,
+    device = "id:pixel_4",
+    fontScale = 100.0f,
 )
 @Composable
 fun MainScreenPreview(modifier: Modifier = Modifier) {
@@ -138,7 +145,18 @@ fun MainScreenPreview(modifier: Modifier = Modifier) {
         application = { modules(mainModule) }
     ) {
         ComposePlaygroundTheme {
-            MainScreen()
+            Box(
+                modifier = modifier
+                    .fillMaxSize(),
+                contentAlignment = Alignment.BottomCenter,
+            ) {
+                CustomBottomNav(
+                    itemsState = mutableStateOf(
+                        BottomNavItemsData.bottomNavItemsDataDefault
+                    ),
+                    onClickItem = {}
+                )
+            }
         }
     }
 }
