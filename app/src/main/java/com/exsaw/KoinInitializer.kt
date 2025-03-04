@@ -5,7 +5,7 @@ package com.exsaw
  */
 import android.content.Context
 import androidx.startup.Initializer
-import com.exsaw.composeplayground.basic_layout.state_managment.di.numberGuessScreenModule
+import com.exsaw.composeplayground.features.state_managment.di.numberGuessScreenModule
 import com.exsaw.composeplayground.di.mainModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger

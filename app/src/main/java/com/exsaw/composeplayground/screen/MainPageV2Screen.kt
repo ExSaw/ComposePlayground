@@ -15,9 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.exsaw.composeplayground.basic_layout.bottom_nav.BottomNavItemsData
-import com.exsaw.composeplayground.basic_layout.bottom_nav.CustomBottomNav
-import com.exsaw.composeplayground.basic_layout.modifiers_playground.MainPageTabsDemo
+import com.exsaw.composeplayground.features.bottom_nav.BottomNavItemsData
+import com.exsaw.composeplayground.features.bottom_nav.CustomBottomNav
+import com.exsaw.composeplayground.features.modifiers_playground.MainPageTabsDemo
 import com.exsaw.composeplayground.di.mainModule
 import com.exsaw.composeplayground.ui.theme.ComposePlaygroundTheme
 import org.koin.compose.KoinApplication
