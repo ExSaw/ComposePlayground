@@ -55,6 +55,7 @@ dependencies {
     implementation(libs.androidx.adaptive.android)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.kotlinx.coroutines.android)
 
     // Jetpack startup
     implementation(libs.jetpack.startup)

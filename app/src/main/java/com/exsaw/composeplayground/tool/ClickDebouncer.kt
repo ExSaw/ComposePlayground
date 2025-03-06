@@ -28,23 +28,24 @@ import androidx.lifecycle.lifecycleScope
 import com.exsaw.composeplayground.core.IDispatchersProvider
 import com.exsaw.composeplayground.di.CoreQualifiers
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.plus
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.seconds
-import kotlin.time.DurationUnit
 
-const val DEFAULT_CLICK_DEBOUNCE_TIME = 100
 
 /**
  * provides DebouncedAction for OnClick() parameter
@@ -344,24 +345,34 @@ fun emitClickToDebouncer(debounceTime: Duration? = null) {
  */
 private object ClickDebouncer : KoinComponent {
 
+    private val DEFAULT_CLICK_DEBOUNCE_TIME = 100.milliseconds
     private val dispatchers: IDispatchersProvider by inject()
     private val appScope: CoroutineScope by inject(CoreQualifiers.APP_SCOPE.qualifier)
     private val vibrator: Vibrator by inject()
 
     private var clickJob: Job? = null
 
-    private val _isBlockedState = MutableStateFlow(false)
-    val isBlockedState = _isBlockedState.asStateFlow()
-
-    private var debounceTime: Duration = DEFAULT_CLICK_DEBOUNCE_TIME.milliseconds
+    private val _isBlockedState = MutableStateFlow(ClickDebouncerStateData())
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val isBlockedState = _isBlockedState.mapLatest { it.isBlocked }
+        .stateIn(
+            scope = appScope.plus(dispatchers.default),
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = false
+        )
 
     init {
         appScope.launch(dispatchers.default) {
             _isBlockedState
-                .filter { it == true }
+                .filter { it.isBlocked }
                 .collectLatest {
-                    delay(debounceTime)
-                    _isBlockedState.update { false }
+                    delay(it.debounceTime)
+                    _isBlockedState.update {
+                        it.copy(
+                            isBlocked = false,
+                            debounceTime = DEFAULT_CLICK_DEBOUNCE_TIME
+                        )
+                    }
                 }
         }
     }
@@ -400,10 +411,7 @@ private object ClickDebouncer : KoinComponent {
     ) {
         when {
             (!isBlockedState.value && (clickJob?.isCompleted == true || clickJob == null)) -> {
-                blockInput(
-                    isBlock = true,
-                    debounceTime = debounceTime
-                )
+                blockInput(true, debounceTime)
                 clickJob = coroutineScope.launch { action.invoke() }
             }
 
@@ -421,9 +429,16 @@ private object ClickDebouncer : KoinComponent {
         isBlock: Boolean,
         debounceTime: Duration?
     ) {
-        this.debounceTime = debounceTime ?: DEFAULT_CLICK_DEBOUNCE_TIME.milliseconds
-        _isBlockedState.update { isBlock }
+        _isBlockedState.update { it.copy(
+            isBlocked = isBlock,
+            debounceTime = debounceTime ?: DEFAULT_CLICK_DEBOUNCE_TIME
+        ) }
     }
+
+    private data class ClickDebouncerStateData(
+        val isBlocked: Boolean = false,
+        val debounceTime: Duration = DEFAULT_CLICK_DEBOUNCE_TIME
+    )
 }
 
 /**

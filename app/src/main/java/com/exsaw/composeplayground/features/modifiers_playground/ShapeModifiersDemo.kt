@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
@@ -98,14 +100,16 @@ fun ShapeModifiersDemo(modifier: Modifier = Modifier) {
                 .shadow(
                     elevation = 10.dp,
                     shape = TabButtonShape(
-                        activeTab = 1
+                        activeTabIndex = 1,
+                        tabsCount = 3
                     ),
                     ambientColor = Color.Blue,
                     spotColor = Color.Blue,
                 )
                 .clip(
                     TabButtonShape(
-                        activeTab = 1
+                        activeTabIndex = 1,
+                        tabsCount = 3
                     )
                 )
                 .background(Color.Magenta)
@@ -114,11 +118,11 @@ fun ShapeModifiersDemo(modifier: Modifier = Modifier) {
 }
 
 class TabButtonShape(
-    val activeTab: Int,
+    val activeTabIndex: Int,
+    val tabsCount: Int,
 ) : Shape {
 
-    private val numOfTabs = 3
-    private val acrSizePercent = 0.15f
+    private val acrSizePercent = 0.25f
 
     override fun createOutline(
         size: Size,
@@ -126,9 +130,9 @@ class TabButtonShape(
         density: Density
     ): Outline {
         val activeTabIndex =
-            MathUtils.clamp(activeTab, 0, numOfTabs - 1)
+            MathUtils.clamp(activeTabIndex, 0, tabsCount - 1)
         val (w, h) = size.width to size.height
-        val tabWidth = w / numOfTabs
+        val tabWidth = w / tabsCount
         val arcSize = minOf(w, h) * acrSizePercent
         return Outline.Generic(
             when {
@@ -182,7 +186,7 @@ class TabButtonShape(
                     }
                 }
 
-                activeTabIndex >= (numOfTabs - 1) -> {
+                activeTabIndex >= (tabsCount - 1) -> {
                     Path().apply {
                         moveTo(arcSize, h) // arc center
                         lineTo(arcSize, h - arcSize)

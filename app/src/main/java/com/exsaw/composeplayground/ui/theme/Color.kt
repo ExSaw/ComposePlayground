@@ -44,4 +44,14 @@ object Colors {
         val Orange = Color(0xFFFFEFE3)
         val Purple = Color(0xFFF9E3FF)
     }
+
+    object Opaque {
+        val Red = Color(0x80FFE3E3)
+        val Green = Color(0x80E3FFE9)
+        val Blue = Color(0x80E3F6FF)
+        val Pink = Color(0x80FFE3F6)
+        val Yellow = Color(0x80FFFBE3)
+        val Orange = Color(0x80FFEFE3)
+        val Purple = Color(0x80F9E3FF)
+    }
 }
