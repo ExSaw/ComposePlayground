@@ -26,7 +26,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.exsaw.composeplayground.di.mainModule
+import com.exsaw.composeplayground.tool.Vibrator
 import com.exsaw.composeplayground.tool.debouncedClickable
+import com.exsaw.composeplayground.tool.logUnlimited
 import com.exsaw.composeplayground.ui.theme.ComposePlaygroundTheme
 import org.koin.compose.KoinApplication
 
@@ -80,9 +82,12 @@ fun MainPageTabsDemo(modifier: Modifier = Modifier) {
                 text = "\uD83C\uDFD6\uFE0F Туры",
                 textAlign = TextAlign.Center,
                 modifier = Modifier
-                    .debouncedClickable(
+                    .debouncedClickable (
                         indication = null,
-                        interactionSource = remember { MutableInteractionSource() }
+                        interactionSource = remember { MutableInteractionSource() },
+                        actionOnLongClick = {
+                            logUnlimited("---LONG CLICK")
+                        }
                     ) {
                         activeTab = 0
                     }

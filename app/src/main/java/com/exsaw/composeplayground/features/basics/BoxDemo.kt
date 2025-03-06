@@ -2,6 +2,7 @@ package com.exsaw.composeplayground.features.basics
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
@@ -19,7 +20,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.exsaw.composeplayground.R
 import com.exsaw.composeplayground.di.mainModule
-import com.exsaw.composeplayground.tool.debouncedClickable
 import com.exsaw.composeplayground.tool.logUnlimited
 import com.exsaw.composeplayground.ui.theme.ComposePlaygroundTheme
 import org.koin.compose.KoinApplication
@@ -36,15 +36,9 @@ fun BoxDemo(modifier: Modifier = Modifier) {
             painter = painterResource(R.drawable.music_1),
             contentDescription = null,
             modifier = modifier
-                .debouncedClickable(
-                    isVibrateOnBlockedState = true,
-                    actionOnLongClick = {
-                        logUnlimited("---->BoxDemo->Image Long")
-                    },
-                    action = {
-                        logUnlimited("---->BoxDemo->Image Short")
-                    }
-                )
+                .clickable {
+                    logUnlimited("---->BoxDemo->Image Short")
+                }
         )
         Box(
             modifier = Modifier

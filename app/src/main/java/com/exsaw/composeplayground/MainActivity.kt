@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.IntOffset
 import com.exsaw.composeplayground.features.advanced_layout.LazyLayout2dMapDemo
 import com.exsaw.composeplayground.features.advanced_layout.defaultListOfLazyLayout2dMapItems
+import com.exsaw.composeplayground.screen.MainPageV2Screen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,7 +21,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
 
-//            MainPageV2Screen()
+            MainPageV2Screen()
 
 //            Scaffold(
 //                bottomBar = {
@@ -62,27 +63,27 @@ class MainActivity : ComponentActivity() {
 //                )
 //            }
 
-            Scaffold(
-                modifier = Modifier
-                    .fillMaxSize(),
-            ) { padding ->
-                val lazyLayout2dMapItems = remember {
-                    defaultListOfLazyLayout2dMapItems
-                }
-                val lazyLayout2dMapOffset = remember {
-                    mutableStateOf(IntOffset.Zero)
-                }
-                LazyLayout2dMapDemo(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(padding),
-                    items = lazyLayout2dMapItems,
-                    mapOffset = lazyLayout2dMapOffset.value,
-                    onDrag = { offset ->
-                        lazyLayout2dMapOffset.value += offset
-                    }
-                )
-            }
+//            Scaffold(
+//                modifier = Modifier
+//                    .fillMaxSize(),
+//            ) { padding ->
+//                val lazyLayout2dMapItems = remember {
+//                    defaultListOfLazyLayout2dMapItems
+//                }
+//                val lazyLayout2dMapOffset = remember {
+//                    mutableStateOf(IntOffset.Zero)
+//                }
+//                LazyLayout2dMapDemo(
+//                    modifier = Modifier
+//                        .fillMaxSize()
+//                        .padding(padding),
+//                    items = lazyLayout2dMapItems,
+//                    mapOffset = lazyLayout2dMapOffset.value,
+//                    onDrag = { offset ->
+//                        lazyLayout2dMapOffset.value += offset
+//                    }
+//                )
+//            }
         }
     }
 }

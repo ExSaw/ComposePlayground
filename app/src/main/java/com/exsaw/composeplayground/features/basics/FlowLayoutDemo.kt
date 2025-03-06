@@ -23,6 +23,7 @@ import com.exsaw.composeplayground.tool.logUnlimited
 import com.exsaw.composeplayground.tool.onDebouncedClick
 import com.exsaw.composeplayground.ui.theme.ComposePlaygroundTheme
 import org.koin.compose.KoinApplication
+import kotlin.time.Duration.Companion.seconds
 
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -66,7 +67,7 @@ fun FlowLayoutDemo(modifier: Modifier = Modifier) {
             AssistChip(
                 onClick = onDebouncedClick(
                     coroutineScope = rememberCoroutineScope(),
-                    debounceTime = 3000L,
+                    debounceTime = 3.seconds,
                     action = {
                         logUnlimited("---->FlowLayoutDemo->$i clicked")
                     }
