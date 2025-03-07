@@ -68,8 +68,8 @@ fun onDebouncedClick(
 
 @Composable
 fun Modifier.debouncedClickable(
-    isEnabled: Boolean = true,
     debounceTime: Duration? = null,
+    isEnabled: Boolean = true,
     isVibrateOnBlockedState: Boolean = true,
     interactionSource: MutableInteractionSource? = null,
     indication: Indication? = null,
@@ -357,7 +357,7 @@ private object ClickDebouncer : KoinComponent {
     val isBlockedState = _isBlockedState.mapLatest { it.isBlocked }
         .stateIn(
             scope = appScope.plus(dispatchers.default),
-            started = SharingStarted.WhileSubscribed(),
+            started = SharingStarted.Eagerly,
             initialValue = false
         )
 

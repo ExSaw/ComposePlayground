@@ -39,6 +39,7 @@ import com.exsaw.composeplayground.tool.debouncedClickable
 import com.exsaw.composeplayground.ui.theme.Colors
 import com.exsaw.composeplayground.ui.theme.ComposePlaygroundTheme
 import org.koin.compose.KoinApplication
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun MainPageTabsDemo(
