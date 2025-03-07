@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -85,7 +86,7 @@ fun MainPageTabsDemo(
                     }
                 )
                 .shadow(
-                    elevation = 12.dp,
+                    elevation = 8.dp,
                     shape = tabsForegroundShape,
                     ambientColor = Color(0xFF000000),
                     spotColor = Color(0x650073FF),
@@ -116,11 +117,9 @@ fun MainPageTabsDemo(
                     && (index + 1 <= tabItems.lastIndex
                             && !tabItems[index + 1].isActive)
                 ) 1.0f else 0.0f
-                Box(
+                VerticalDivider(
                     modifier = Modifier
                         .alpha(dividerAlpha)
-                        .width(1.dp)
-                        .fillMaxHeight()
                         .background(Color(0x1A000000))
                 )
             }

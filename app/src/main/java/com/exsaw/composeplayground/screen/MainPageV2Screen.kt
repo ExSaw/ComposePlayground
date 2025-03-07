@@ -6,26 +6,34 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.draw.shadow
@@ -38,6 +46,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -51,6 +61,7 @@ import com.exsaw.composeplayground.di.mainModule
 import com.exsaw.composeplayground.features.modifiers_playground.MainPageTabItem
 import com.exsaw.composeplayground.features.modifiers_playground.TabButtonShape
 import com.exsaw.composeplayground.features.modifiers_playground.testTabItems
+import com.exsaw.composeplayground.tool.debouncedClickable
 import com.exsaw.composeplayground.tool.logUnlimited
 import com.exsaw.composeplayground.ui.theme.Colors
 import com.exsaw.composeplayground.ui.theme.ComposePlaygroundTheme
@@ -69,6 +80,10 @@ fun MainPageV2Screen(modifier: Modifier = Modifier) {
             addAll(testTabItems)
         }
     } // TODO: itemsHandler
+    val backgroundColor = remember { mutableStateOf(Color(0xFF0B8AFF)) }
+    val isShowHotelClassAndMealsElement = remember {
+        mutableStateOf(false)
+    }
 
     Scaffold(
         bottomBar = {
@@ -88,7 +103,7 @@ fun MainPageV2Screen(modifier: Modifier = Modifier) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(scaffoldPadding.calculateTopPadding())
-                .background(Color(0xFF0B8AFF)),
+                .background(backgroundColor.value),
         )
         LazyColumn(
             modifier = Modifier
@@ -107,7 +122,7 @@ fun MainPageV2Screen(modifier: Modifier = Modifier) {
                             drawCircle(
                                 center = Offset(size.minDimension * 0.5f, 0f),
                                 radius = size.maxDimension - 50.dp.toPx(),
-                                color = Color(0xFF0B8AFF)
+                                color = backgroundColor.value,
                             )
                         },
                 ) {
@@ -119,7 +134,9 @@ fun MainPageV2Screen(modifier: Modifier = Modifier) {
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Row {
+                        Row(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
                             Image(
                                 imageVector = ImageVector.vectorResource(R.drawable.ic_htkz_image_logo),
                                 contentDescription = null
@@ -132,7 +149,7 @@ fun MainPageV2Screen(modifier: Modifier = Modifier) {
                         Row(
                             modifier = Modifier
                                 .background(
-                                    color = Color(0xFF0A7CE6),
+                                    color = Color(0x1A000000),
                                     shape = RoundedCornerShape(16.dp)
                                 )
                                 .padding(
@@ -164,15 +181,20 @@ fun MainPageV2Screen(modifier: Modifier = Modifier) {
                                     isActive = clickedItem.index == item.index
                                 )
                             }
+                            backgroundColor.value = when (clickedItem.index) {
+                                0 -> Color(0xFF0B8AFF)
+                                1 -> Color(0xFF0054A1)
+                                else -> Color(0xff57B059)
+                            }
                             logUnlimited("--->MainPageV2Screen->onClickTabItem->$clickedItem")
                         }
                     )
-                    Box(
+                    Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(400.dp)
+                            .wrapContentHeight()
                             .shadow(
-                                elevation = 12.dp,
+                                elevation = 8.dp,
                                 shape = RoundedCornerShape(
                                     bottomStartPercent = 5,
                                     bottomEndPercent = 5
@@ -187,7 +209,17 @@ fun MainPageV2Screen(modifier: Modifier = Modifier) {
                                     bottomEndPercent = 5
                                 )
                             )
-                    )
+                            .padding(horizontal = 16.dp),
+                        horizontalAlignment = Alignment.Start,
+                        verticalArrangement = Arrangement.Top,
+                    ) {
+                        MainPageToursSearchContent(
+                            isShowHotelClassAndMealsElement = isShowHotelClassAndMealsElement,
+                            onClickExpand = {
+                                isShowHotelClassAndMealsElement.value = true
+                            }
+                        )
+                    }
                 }
             }
             item {
