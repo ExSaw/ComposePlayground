@@ -13,6 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.IntOffset
 import com.exsaw.composeplayground.features.advanced_layout.LazyLayout2dMapDemo
 import com.exsaw.composeplayground.features.advanced_layout.defaultListOfLazyLayout2dMapItems
+import com.exsaw.composeplayground.features.side_effect.DerivedStateDemo
+import com.exsaw.composeplayground.features.side_effect.LaunchEffectDemo
 import com.exsaw.composeplayground.screen.MainPageV2Screen
 
 class MainActivity : ComponentActivity() {
@@ -21,7 +23,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
 
-            MainPageV2Screen()
+ //           MainPageV2Screen()
 
 //            Scaffold(
 //                bottomBar = {
@@ -84,6 +86,8 @@ class MainActivity : ComponentActivity() {
 //                    }
 //                )
 //            }
+
+            DerivedStateDemo()
         }
     }
 }

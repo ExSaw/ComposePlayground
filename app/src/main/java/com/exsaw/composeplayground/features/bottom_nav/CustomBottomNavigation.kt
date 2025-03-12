@@ -107,10 +107,15 @@ fun BottomNavButton(
             if (item.hasNews) {
                 Box(
                     modifier = Modifier
-                        .offset(x = 16.dp)
-                        .size(8.dp)
+                        .offset(x = 18.dp)
+                        .size(10.dp)
                         .background(
-                            color = Color.Red,
+                            color = Color.White,
+                            shape = CircleShape,
+                        )
+                        .padding(1.dp)
+                        .background(
+                            color = Color(0xFF1B5AE7),
                             shape = CircleShape,
                         )
                 )

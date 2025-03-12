@@ -26,7 +26,7 @@ object BottomNavItemsData {
             index = 1,
             title = "Сохраненное",
             icon = R.drawable.ic_bottom_nav_favorites_black,
-            hasNews = false,
+            hasNews = true,
         ),
         BottomNavItem(
             isSelected = false,

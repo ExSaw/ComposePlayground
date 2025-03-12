@@ -54,7 +54,7 @@ fun onDebouncedClick(
     coroutineScope: CoroutineScope,
     debounceTime: Duration? = null,
     isVibrateOnBlockedState: Boolean = true,
-    action: (() -> Unit)? = null,
+    action: (() -> Unit)?,
 ): () -> Unit = {
     action?.let {
         ClickDebouncer.performActionCompose(
@@ -75,7 +75,7 @@ fun Modifier.debouncedClickable(
     indication: Indication? = null,
     role: Role? = null,
     actionOnLongClick: (() -> Unit)? = null,
-    action: (() -> Unit)? = null,
+    action: (() -> Unit)?,
 ): Modifier {
     val coroutineScope = rememberCoroutineScope()
     return customClickableWithIndicationIfNeeded(
