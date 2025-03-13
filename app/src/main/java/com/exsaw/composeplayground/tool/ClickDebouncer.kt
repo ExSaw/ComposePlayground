@@ -54,7 +54,7 @@ fun onDebouncedClick(
     coroutineScope: CoroutineScope,
     debounceTime: Duration? = null,
     isVibrateOnBlockedState: Boolean = true,
-    action: (() -> Unit)?,
+    action: (CoroutineScope.(IDispatchersProvider) -> Unit)?,
 ): () -> Unit = {
     action?.let {
         ClickDebouncer.performActionCompose(
@@ -74,8 +74,8 @@ fun Modifier.debouncedClickable(
     interactionSource: MutableInteractionSource? = null,
     indication: Indication? = null,
     role: Role? = null,
-    actionOnLongClick: (() -> Unit)? = null,
-    action: (() -> Unit)?,
+    actionOnLongClick: (CoroutineScope.(IDispatchersProvider) -> Unit)? = null,
+    action: (CoroutineScope.(IDispatchersProvider) -> Unit)?,
 ): Modifier {
     val coroutineScope = rememberCoroutineScope()
     return customClickableWithIndicationIfNeeded(
@@ -102,8 +102,8 @@ private data class DebouncedClickableElement(
     val debounceTime: Duration?,
     val isVibrateOnBlockedState: Boolean,
     val role: Role?,
-    val action: (() -> Unit)?,
-    val actionOnLongClick: (() -> Unit)? = null,
+    val action: (CoroutineScope.(IDispatchersProvider) -> Unit)?,
+    val actionOnLongClick: (CoroutineScope.(IDispatchersProvider) -> Unit)? = null,
     val interactionSource: MutableInteractionSource?,
     val indication: IndicationNodeFactory?,
 ) : ModifierNodeElement<DebouncedClickableNode>() {
@@ -153,8 +153,8 @@ private class DebouncedClickableNode(
     val debounceTime: Duration?,
     val isVibrateOnBlockedState: Boolean,
     val role: Role?,
-    val action: (() -> Unit)?,
-    val actionOnLongClick: (() -> Unit)? = null,
+    val action: (CoroutineScope.(IDispatchersProvider) -> Unit)?,
+    val actionOnLongClick: (CoroutineScope.(IDispatchersProvider) -> Unit)? = null,
     val interactionSource: MutableInteractionSource?,
     val indication: IndicationNodeFactory?,
 ) : DelegatingNode() {
@@ -193,8 +193,8 @@ private class DebouncedClickableNode(
         nodeCoroutineScope: CoroutineScope,
         debounceTime: Duration?,
         isVibrateOnBlockedState: Boolean,
-        action: (() -> Unit)?,
-        actionOnLongClick: (() -> Unit)? = null,
+        action: (CoroutineScope.(IDispatchersProvider) -> Unit)?,
+        actionOnLongClick: (CoroutineScope.(IDispatchersProvider) -> Unit)? = null,
         interactionSource: MutableInteractionSource?,
         indication: IndicationNodeFactory?,
     ) {
@@ -227,8 +227,8 @@ private class DebouncedClickableNode(
 
     private fun isEnabled(
         isEnabled: Boolean,
-        action: (() -> Unit)?,
-        actionOnLongClick: (() -> Unit)?
+        action: (CoroutineScope.(IDispatchersProvider) -> Unit)?,
+        actionOnLongClick: (CoroutineScope.(IDispatchersProvider) -> Unit)?
     ): Boolean = isEnabled && (action != null || actionOnLongClick != null)
 }
 
@@ -241,10 +241,10 @@ private class DebouncedClickableNode(
 fun Modifier.debouncedClickableUnstable(
     debounceTime: Duration? = null,
     isVibrateOnBlockedState: Boolean = true,
-    actionOnLongClick: (() -> Unit)? = null,
+    actionOnLongClick: (CoroutineScope.(IDispatchersProvider) -> Unit)? = null,
     interactionSource: MutableInteractionSource? = null,
     indication: Indication? = null,
-    action: (() -> Unit)? = null,
+    action: (CoroutineScope.(IDispatchersProvider) -> Unit)? = null,
 ): Modifier = composed {
     val coroutineScope = rememberCoroutineScope()
     val debouncedActionOnClick = onDebouncedClick(
@@ -407,12 +407,12 @@ private object ClickDebouncer : KoinComponent {
         coroutineScope: CoroutineScope,
         debounceTime: Duration?,
         isVibrateOnBlockedState: Boolean,
-        action: (() -> Unit)
+        action: (CoroutineScope.(IDispatchersProvider) -> Unit)
     ) {
         when {
             (!isBlockedState.value && (clickJob?.isCompleted == true || clickJob == null)) -> {
                 blockInput(true, debounceTime)
-                clickJob = coroutineScope.launch { action.invoke() }
+                clickJob = coroutineScope.launch { action(dispatchers) }
             }
 
             isVibrateOnBlockedState -> {
