@@ -11,7 +11,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.IntOffset
+import com.exsaw.composeplayground.features.advanced_layout.CoilImagesLoadingDemo
 import com.exsaw.composeplayground.features.advanced_layout.LazyLayout2dMapDemo
+import com.exsaw.composeplayground.features.advanced_layout.LazyListPerformanceDemo
 import com.exsaw.composeplayground.features.advanced_layout.defaultListOfLazyLayout2dMapItems
 import com.exsaw.composeplayground.features.composition_locals.CompositionLocalDemo
 import com.exsaw.composeplayground.features.side_effect.DerivedStateDemo
@@ -24,7 +26,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
 
- //           MainPageV2Screen()
+            //           MainPageV2Screen()
 
 //            Scaffold(
 //                bottomBar = {
@@ -88,7 +90,17 @@ class MainActivity : ComponentActivity() {
 //                )
 //            }
 
-            CompositionLocalDemo()
+//            Scaffold(
+//                Modifier
+//                    .fillMaxSize(),
+//            ) { padding ->
+//                CoilImagesLoadingDemo(
+//                    modifier = Modifier
+//                        .padding(padding)
+//                )
+//            }
+
+            LazyListPerformanceDemo()
         }
     }
 }

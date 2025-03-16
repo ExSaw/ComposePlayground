@@ -57,9 +57,7 @@ fun ScaffoldDemo(modifier: Modifier = Modifier) {
                 modifier = Modifier.background(Color.Green),
                 navigationIcon = {
                     IconButton(
-                        onClick = onDebouncedClick(
-                            rememberCoroutineScope()
-                        ) {
+                        onClick =  {
                             logUnlimited("---->ScaffoldDemo->NavBack")
                         }
                     ) {
@@ -73,7 +71,7 @@ fun ScaffoldDemo(modifier: Modifier = Modifier) {
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = onDebouncedClick(coroutineScope) {
+                onClick =  {
                     coroutineScope.launch {
                         snackBarState.showSnackbar(
                             message = "Clicked FAB"

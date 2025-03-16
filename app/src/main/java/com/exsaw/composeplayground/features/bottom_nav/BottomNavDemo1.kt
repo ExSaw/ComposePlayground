@@ -66,7 +66,7 @@ fun BottomNavDemo1(modifier: Modifier = Modifier) {
                         ) {
                             this@NavigationBar.NavigationBarItem(
                                 selected = selectedItemIndex == item.index,
-                                onClick = onDebouncedClick(rememberCoroutineScope()) {
+                                onClick =  {
                                     selectedItemIndex = item.index
                                     // navController.navigate(...)
                                 },

@@ -148,7 +148,7 @@ fun FocusManagementDemo(modifier: Modifier = Modifier) {
             )
         )
         Button(
-            onClick = onDebouncedClick(rememberCoroutineScope()) {
+            onClick =  {
                 refocusAction()
             }
         ) {
@@ -157,7 +157,7 @@ fun FocusManagementDemo(modifier: Modifier = Modifier) {
             )
         }
         Button(
-            onClick = onDebouncedClick(rememberCoroutineScope()) {
+            onClick =  {
                 focusManager.clearFocus()
             }
         ) {

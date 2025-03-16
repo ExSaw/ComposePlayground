@@ -37,7 +37,7 @@ fun FlowLayoutDemo(modifier: Modifier = Modifier) {
         overflow = FlowRowOverflow.expandOrCollapseIndicator(
             expandIndicator = {
                 IconButton(
-                    onDebouncedClick(rememberCoroutineScope()) {
+                     {
                         maxLinesState.intValue = Int.MAX_VALUE
                         logUnlimited("---->FlowLayoutDemo->Expand")
                     }
@@ -50,7 +50,7 @@ fun FlowLayoutDemo(modifier: Modifier = Modifier) {
             },
             collapseIndicator = {
                 IconButton(
-                    onDebouncedClick(rememberCoroutineScope()) {
+                     {
                         maxLinesState.intValue = 3
                         logUnlimited("---->FlowLayoutDemo->Expand")
                     }
@@ -65,13 +65,9 @@ fun FlowLayoutDemo(modifier: Modifier = Modifier) {
     ) {
         for(i in 1..30) {
             AssistChip(
-                onClick = onDebouncedClick(
-                    coroutineScope = rememberCoroutineScope(),
-                    debounceTime = 3.seconds,
-                    action = {
-                        logUnlimited("---->FlowLayoutDemo->$i clicked")
-                    }
-                ),
+                onClick = {
+                    logUnlimited("---->FlowLayoutDemo->$i clicked")
+                },
                 label = {
                     Text("Item $i")
                 },

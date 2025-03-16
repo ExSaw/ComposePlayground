@@ -15,6 +15,9 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.indication
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DontMemoize
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -29,6 +32,7 @@ import com.exsaw.composeplayground.core.IDispatchersProvider
 import com.exsaw.composeplayground.di.CoreQualifiers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -48,24 +52,21 @@ import kotlin.time.Duration.Companion.milliseconds
 
 
 /**
- * provides DebouncedAction for OnClick() parameter
+ * Provides DebouncedAction for OnClick() parameter
  */
+@Composable
 fun onDebouncedClick(
-    coroutineScope: CoroutineScope,
     debounceTime: Duration? = null,
     isVibrateOnBlockedState: Boolean = true,
-    action: (CoroutineScope.(IDispatchersProvider) -> Unit)?,
-): () -> Unit = {
-    action?.let {
-        ClickDebouncer.performActionCompose(
-            coroutineScope = coroutineScope,
-            debounceTime = debounceTime,
-            isVibrateOnBlockedState = isVibrateOnBlockedState,
-            action = action
-        )
-    }
+    action: () -> Unit
+): () -> Unit {
+    val scope = rememberCoroutineScope()
+    return remember { onDebouncedClick(scope, debounceTime, isVibrateOnBlockedState) { action() } }
 }
 
+/**
+ * Provides DebouncedAction Modifier
+ */
 @Composable
 fun Modifier.debouncedClickable(
     debounceTime: Duration? = null,
@@ -93,6 +94,70 @@ fun Modifier.debouncedClickable(
             interactionSource = interSource,
             indication = indicationNodeFactory,
         )
+    }
+}
+
+@Deprecated(
+    message = "Unstable variation for test purposes",
+    replaceWith = ReplaceWith("Modifier.debouncedClickable()"),
+    level = DeprecationLevel.WARNING
+)
+@OptIn(ExperimentalFoundationApi::class)
+fun Modifier.debouncedClickableUnstable(
+    debounceTime: Duration? = null,
+    isVibrateOnBlockedState: Boolean = true,
+    actionOnLongClick: (CoroutineScope.(IDispatchersProvider) -> Unit)? = null,
+    interactionSource: MutableInteractionSource? = null,
+    indication: Indication? = null,
+    action: (CoroutineScope.(IDispatchersProvider) -> Unit)? = null,
+): Modifier = composed {
+    val coroutineScope = rememberCoroutineScope()
+    val debouncedActionOnClick = onDebouncedClick(
+        coroutineScope = coroutineScope,
+        debounceTime = debounceTime,
+        isVibrateOnBlockedState = isVibrateOnBlockedState,
+        action = action
+    )
+    val debouncedActionOnLongClick = onDebouncedClick(
+        coroutineScope = coroutineScope,
+        debounceTime = debounceTime,
+        isVibrateOnBlockedState = isVibrateOnBlockedState,
+        action = actionOnLongClick
+    )
+    Modifier.combinedClickable(
+        enabled = action != null || actionOnLongClick != null,
+        onClick = { debouncedActionOnClick.invoke() },
+        onLongClick = { debouncedActionOnLongClick.invoke() },
+        indication = indication,
+        interactionSource = interactionSource,
+    )
+}
+
+fun View.setDebouncedClickListener(
+    debounceTime: Duration? = null,
+    isVibrateOnBlockedState: Boolean = true,
+    actionOnLongClick: ((View) -> Unit)? = null,
+    action: ((View) -> Unit)?
+) {
+    isClickable = if (action != null || actionOnLongClick != null) {
+        if (action != null) setOnClickListener(
+            getDebouncedClickListener(
+                view = this,
+                debounceTime = debounceTime,
+                isVibrateOnBlockedState = isVibrateOnBlockedState
+            ) { action(this) }
+        )
+        if (actionOnLongClick != null) setOnLongClickListener(
+            getDebouncedLongClickListener(
+                view = this,
+                debounceTime = debounceTime
+            ) { actionOnLongClick(this) }
+        )
+        else setOnLongClickListener { true }
+        true
+    } else {
+        setOnClickListener(null)
+        false
     }
 }
 
@@ -232,67 +297,19 @@ private class DebouncedClickableNode(
     ): Boolean = isEnabled && (action != null || actionOnLongClick != null)
 }
 
-@Deprecated(
-    message = "Unstable variation for test purposes",
-    replaceWith = ReplaceWith("Modifier.debouncedClickable()"),
-    level = DeprecationLevel.WARNING
-)
-@OptIn(ExperimentalFoundationApi::class)
-fun Modifier.debouncedClickableUnstable(
+private fun onDebouncedClick(
+    coroutineScope: CoroutineScope,
     debounceTime: Duration? = null,
     isVibrateOnBlockedState: Boolean = true,
-    actionOnLongClick: (CoroutineScope.(IDispatchersProvider) -> Unit)? = null,
-    interactionSource: MutableInteractionSource? = null,
-    indication: Indication? = null,
-    action: (CoroutineScope.(IDispatchersProvider) -> Unit)? = null,
-): Modifier = composed {
-    val coroutineScope = rememberCoroutineScope()
-    val debouncedActionOnClick = onDebouncedClick(
-        coroutineScope = coroutineScope,
-        debounceTime = debounceTime,
-        isVibrateOnBlockedState = isVibrateOnBlockedState,
-        action = action
-    )
-    val debouncedActionOnLongClick = onDebouncedClick(
-        coroutineScope = coroutineScope,
-        debounceTime = debounceTime,
-        isVibrateOnBlockedState = isVibrateOnBlockedState,
-        action = actionOnLongClick
-    )
-    Modifier.combinedClickable(
-        enabled = action != null || actionOnLongClick != null,
-        onClick = { debouncedActionOnClick.invoke() },
-        onLongClick = { debouncedActionOnLongClick.invoke() },
-        indication = indication,
-        interactionSource = interactionSource,
-    )
-}
-
-fun View.setDebouncedClickListener(
-    debounceTime: Duration? = null,
-    isVibrateOnBlockedState: Boolean = true,
-    actionOnLongClick: ((View) -> Unit)? = null,
-    action: ((View) -> Unit)?
-) {
-    isClickable = if (action != null || actionOnLongClick != null) {
-        if (action != null) setOnClickListener(
-            getDebouncedClickListener(
-                view = this,
-                debounceTime = debounceTime,
-                isVibrateOnBlockedState = isVibrateOnBlockedState
-            ) { action(this) }
+    action: (CoroutineScope.(IDispatchersProvider) -> Unit)?,
+): () -> Unit = {
+    action?.let {
+        ClickDebouncer.performActionCompose(
+            coroutineScope = coroutineScope,
+            debounceTime = debounceTime,
+            isVibrateOnBlockedState = isVibrateOnBlockedState,
+            action = action
         )
-        if (actionOnLongClick != null) setOnLongClickListener(
-            getDebouncedLongClickListener(
-                view = this,
-                debounceTime = debounceTime
-            ) { actionOnLongClick(this) }
-        )
-        else setOnLongClickListener { true }
-        true
-    } else {
-        setOnClickListener(null)
-        false
     }
 }
 

@@ -53,8 +53,8 @@ fun CompositionLocalDemo(modifier: Modifier = Modifier) {
         Button(
             modifier = Modifier
                 .padding(innerPadding),
-            onClick = onDebouncedClick(coroutineScope) {
-                launch(it.default) {
+            onClick =  {
+                coroutineScope.launch {
                     state.showSnackbar("Snackbar")
                 }
             },

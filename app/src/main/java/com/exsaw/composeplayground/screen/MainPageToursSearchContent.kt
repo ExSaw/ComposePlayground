@@ -31,6 +31,7 @@ import com.exsaw.composeplayground.di.mainModule
 import com.exsaw.composeplayground.tool.debouncedClickable
 import com.exsaw.composeplayground.ui.theme.Colors
 import com.exsaw.composeplayground.ui.theme.ComposePlaygroundTheme
+import com.exsaw.composeplayground.ui.theme.Typography
 import org.koin.compose.KoinApplication
 
 @Composable
@@ -53,7 +54,7 @@ fun MainPageToursSearchContent(
                 text = "Алматы",
                 color = Colors.Mono.Black,
                 fontSize = 16.sp,
-                fontWeight = FontWeight.SemiBold
+                fontWeight = FontWeight.SemiBold,
             )
         }
 

@@ -11,7 +11,7 @@ android {
     defaultConfig {
         applicationId = "com.exsaw.composeplayground"
         minSdk = 28
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -38,6 +38,9 @@ android {
     buildFeatures {
         compose = true
     }
+    composeCompiler {
+        enableStrongSkippingMode = true
+    }
 }
 
 dependencies {
@@ -59,6 +62,10 @@ dependencies {
 
     // Jetpack startup
     implementation(libs.jetpack.startup)
+
+    // Coil
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network)
 
     // DI Koin
     implementation(platform(libs.koin.bom))

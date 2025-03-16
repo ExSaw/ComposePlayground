@@ -128,7 +128,7 @@ fun HotelBookingScreen(
                         label = {
                             Text(text = tagData)
                         },
-                        onClick = onDebouncedClick(rememberCoroutineScope()) {
+                        onClick =  {
                             logUnlimited("---->HotelBookingScreen->ClickedTag=$tagData")
                         }
                     )
@@ -196,7 +196,7 @@ fun HotelBookingScreen(
         }
         item {
             Button(
-                onClick = onDebouncedClick(rememberCoroutineScope()) {
+                onClick =  {
                     logUnlimited("---->HotelBookingScreen->Book now")
                 },
                 modifier = Modifier

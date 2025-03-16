@@ -71,7 +71,7 @@ fun LaunchEffectDemo(modifier: Modifier = Modifier) {
                 .fillMaxSize()
                 .padding(innerPadding)
                 .wrapContentSize(),
-            onClick = onDebouncedClick(scope) {
+            onClick =  {
                 counter.intValue++
 // variant 1
 //                if(counter.intValue % 2 == 0) {

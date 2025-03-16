@@ -106,7 +106,7 @@ fun NumberGuessScreen(
         val buttonText = uiState.value?.guessButtonText
         if (buttonText?.isNotBlank() == true) {
             Button(
-                onClick = onDebouncedClick(rememberCoroutineScope()) {
+                onClick = {
                     onAction(NumberGuessAction.OnGuessButtonClick)
                 }
             ) {

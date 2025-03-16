@@ -65,7 +65,7 @@ fun DerivedStateDemo(modifier: Modifier = Modifier) {
 
     if(isShowScrollToTopButton) {
         FloatingActionButton(
-            onClick = onDebouncedClick(scope) {
+            onClick =  {
                 scope.launch {
                     lazyListState.animateScrollToItem(0)
                 }
