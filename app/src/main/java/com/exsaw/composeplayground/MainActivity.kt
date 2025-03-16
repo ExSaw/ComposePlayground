@@ -26,7 +26,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
 
-            //           MainPageV2Screen()
+                      MainPageV2Screen()
 
 //            Scaffold(
 //                bottomBar = {
@@ -100,7 +100,7 @@ class MainActivity : ComponentActivity() {
 //                )
 //            }
 
-            LazyListPerformanceDemo()
+         //   LazyListPerformanceDemo()
         }
     }
 }

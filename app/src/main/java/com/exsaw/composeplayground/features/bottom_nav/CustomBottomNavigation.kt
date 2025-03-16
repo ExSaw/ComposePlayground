@@ -86,7 +86,6 @@ fun BottomNavButton(
 ) {
     Column(
         modifier = modifier
-            .clickable {  }
             .debouncedClickable { onClick(item) },
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
