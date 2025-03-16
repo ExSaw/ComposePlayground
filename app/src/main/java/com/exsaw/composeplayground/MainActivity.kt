@@ -2,31 +2,71 @@ package com.exsaw.composeplayground
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.IntOffset
-import com.exsaw.composeplayground.features.advanced_layout.CoilImagesLoadingDemo
-import com.exsaw.composeplayground.features.advanced_layout.LazyLayout2dMapDemo
-import com.exsaw.composeplayground.features.advanced_layout.LazyListPerformanceDemo
-import com.exsaw.composeplayground.features.advanced_layout.defaultListOfLazyLayout2dMapItems
-import com.exsaw.composeplayground.features.composition_locals.CompositionLocalDemo
-import com.exsaw.composeplayground.features.side_effect.DerivedStateDemo
-import com.exsaw.composeplayground.features.side_effect.LaunchEffectDemo
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.platform.LocalContext
+import com.exsaw.composeplayground.features.performance.BitmapCompressor
+import com.exsaw.composeplayground.features.performance.KeyCustomLayoutDemo
+import com.exsaw.composeplayground.features.performance.LazyListPerformanceDemo
+import com.exsaw.composeplayground.features.performance.MovableContentDemo
+import com.exsaw.composeplayground.features.performance.PhotoPickerScreen
 import com.exsaw.composeplayground.screen.MainPageV2Screen
+import com.exsaw.composeplayground.ui.theme.ComposePlaygroundTheme
+import org.koin.android.ext.android.inject
 
 class MainActivity : ComponentActivity() {
+
+    private val bitmapCompressor: BitmapCompressor by inject()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+            ComposePlaygroundTheme {
 
-                      MainPageV2Screen()
+                val statusBarLight = Color.White
+                val statusBarDark = Color.Black
+                val navigationBarLight = Color.White
+                val navigationBarDark = Color.Black
+                val isDarkMode = isSystemInDarkTheme()
+
+                DisposableEffect(isDarkMode) {
+                    this@MainActivity.enableEdgeToEdge(
+                        statusBarStyle = if (!isDarkMode) {
+                            SystemBarStyle.light(
+                                statusBarLight.toArgb(),
+                                statusBarDark.toArgb()
+                            )
+                        } else {
+                            SystemBarStyle.dark(
+                                statusBarDark.toArgb()
+                            )
+                        },
+                        navigationBarStyle = if(!isDarkMode){
+                            SystemBarStyle.light(
+                                navigationBarLight.toArgb(),
+                                navigationBarDark.toArgb()
+                            )
+                        } else {
+                            SystemBarStyle.dark(navigationBarDark.toArgb())
+                        }
+                    )
+
+                    onDispose { }
+                }
+
+
+
+  //              MainPageV2Screen()
 
 //            Scaffold(
 //                bottomBar = {
@@ -100,7 +140,39 @@ class MainActivity : ComponentActivity() {
 //                )
 //            }
 
-         //   LazyListPerformanceDemo()
+                //     LazyListPerformanceDemo() // good for debouncer tests
+
+//            Scaffold(
+//                Modifier
+//                    .fillMaxSize(),
+//            ) { padding ->
+//                PhotoPickerScreen(
+//                    compressor = bitmapCompressor,
+//                    modifier = Modifier.padding(padding)
+//                )
+//            }
+
+//                Scaffold(
+//                    Modifier
+//                        .fillMaxSize(),
+//                ) { padding ->
+//                    KeyCustomLayoutDemo(
+//                        modifier = Modifier.padding(padding)
+//                    )
+//                }
+
+
+                Scaffold(
+                    Modifier
+                        .fillMaxSize(),
+                ) { padding ->
+                    MovableContentDemo(
+                        modifier = Modifier.padding(padding)
+                    )
+                }
+
+
+            }
         }
     }
 }

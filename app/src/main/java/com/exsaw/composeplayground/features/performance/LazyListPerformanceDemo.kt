@@ -1,4 +1,4 @@
-package com.exsaw.composeplayground.features.advanced_layout
+package com.exsaw.composeplayground.features.performance
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -21,7 +21,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -83,7 +82,7 @@ fun LazyListPerformanceDemo(modifier: Modifier = Modifier) {
         ) {
             items(
                 items = myList,
-                key = { item -> item.id } // VERY IMPORTANT !
+                key = { item -> item.id } // VERY IMPORTANT ! ! ! ! ! ! ! ! ! ! ! ! ! ! !
             ) { item ->
                 ListItem(
                     headlineContent = {

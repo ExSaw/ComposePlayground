@@ -58,10 +58,14 @@ import kotlin.time.Duration.Companion.milliseconds
 fun onDebouncedClick(
     debounceTime: Duration? = null,
     isVibrateOnBlockedState: Boolean = true,
-    action: () -> Unit
+    action: (CoroutineScope.(IDispatchersProvider) -> Unit)?
 ): () -> Unit {
     val scope = rememberCoroutineScope()
-    return remember { onDebouncedClick(scope, debounceTime, isVibrateOnBlockedState) { action() } }
+    return remember {
+        onDebouncedClick(scope, debounceTime, isVibrateOnBlockedState) { dispatchers ->
+            action?.invoke(scope, dispatchers)
+        }
+    }
 }
 
 /**
