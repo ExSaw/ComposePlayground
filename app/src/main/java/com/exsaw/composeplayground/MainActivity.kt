@@ -14,16 +14,8 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.semantics.semantics
-import androidx.compose.ui.semantics.testTagsAsResourceId
+import com.exsaw.composeplayground.features.internals.StabilityDemo
 import com.exsaw.composeplayground.features.performance.BitmapCompressor
-import com.exsaw.composeplayground.features.performance.DeferredStateReadsDemo
-import com.exsaw.composeplayground.features.performance.KeyCustomLayoutDemo
-import com.exsaw.composeplayground.features.performance.LazyListPerformanceDemo
-import com.exsaw.composeplayground.features.performance.MovableContentDemo
-import com.exsaw.composeplayground.features.performance.PhotoPickerScreen
-import com.exsaw.composeplayground.screen.MainPageV2Screen
 import com.exsaw.composeplayground.ui.theme.ComposePlaygroundTheme
 import org.koin.android.ext.android.inject
 
@@ -144,16 +136,26 @@ class MainActivity : ComponentActivity() {
 //                )
 //            }
 
+//                Scaffold(
+//                    modifier = Modifier
+//                        .fillMaxSize()
+//                        .semantics {
+//                            testTagsAsResourceId = true // use with testTag mod
+//                        }, // for UI tests
+//                ) { innerPadding ->
+//                    LazyListPerformanceDemo(
+//                        Modifier.padding(innerPadding)
+//                    ) // good for debouncer tests
+//                }
+
                 Scaffold(
                     modifier = Modifier
                         .fillMaxSize()
-                        .semantics {
-                            testTagsAsResourceId = true // use with testTag mod
-                        }, // for UI tests
                 ) { innerPadding ->
-                    LazyListPerformanceDemo(
-                        Modifier.padding(innerPadding)
-                    ) // good for debouncer tests
+                    StabilityDemo(
+                        modifier = Modifier
+                            .padding(innerPadding)
+                    )
                 }
 
 //            Scaffold(

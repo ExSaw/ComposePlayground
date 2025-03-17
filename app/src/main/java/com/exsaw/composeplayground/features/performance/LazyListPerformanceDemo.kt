@@ -22,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
@@ -38,6 +39,11 @@ private data class MyListItem(
     val title: String,
     val description: String,
 )
+
+// all phases are skippable
+// 1. Composition (What) (hierarchy changed) // no input changes -> skip
+// 2. Layout(measure, placement) (Where) (size, pos)
+// 3. Drawing (How)
 
 @Composable
 fun LazyListPerformanceDemo(modifier: Modifier = Modifier) {

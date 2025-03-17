@@ -31,6 +31,8 @@ fun CustomLayoutPagedRowNotOptimizedDemo(
         modifier = modifier,
     ) { measurables: List<Measurable>, constraints: Constraints ->
 
+        // measure phase
+
         val layoutConstraints = constraints.copy() // just in case
 
         // measurable - any box, row, text etc... inside content
@@ -66,7 +68,7 @@ fun CustomLayoutPagedRowNotOptimizedDemo(
         val pageItems = pages.getOrNull(page) ?: emptyList()
         val maxHeight = pageItems.fastMaxOfOrNull{ it.height } ?: 0
 
-        layout(
+        layout( // place phase
             width = constraints.maxWidth,
             height = maxHeight,
         ) {
