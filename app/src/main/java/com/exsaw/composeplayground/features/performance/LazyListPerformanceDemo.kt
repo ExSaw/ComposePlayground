@@ -23,6 +23,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.exsaw.composeplayground.di.mainModule
@@ -42,7 +43,7 @@ private data class MyListItem(
 fun LazyListPerformanceDemo(modifier: Modifier = Modifier) {
     var myList by remember {
         mutableStateOf(
-            (0..20).map {
+            (0..100).map {
                 MyListItem(
                     id = it,
                     title = "List item $it",
@@ -79,6 +80,7 @@ fun LazyListPerformanceDemo(modifier: Modifier = Modifier) {
             modifier = modifier
                 .fillMaxSize()
                 .padding(innerPadding)
+                .testTag("main_list") // for UI tests; use with semantics testTagsAsResourceId = true mod
         ) {
             items(
                 items = myList,

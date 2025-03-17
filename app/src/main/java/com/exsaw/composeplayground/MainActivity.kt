@@ -10,11 +10,15 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTagsAsResourceId
 import com.exsaw.composeplayground.features.performance.BitmapCompressor
+import com.exsaw.composeplayground.features.performance.DeferredStateReadsDemo
 import com.exsaw.composeplayground.features.performance.KeyCustomLayoutDemo
 import com.exsaw.composeplayground.features.performance.LazyListPerformanceDemo
 import com.exsaw.composeplayground.features.performance.MovableContentDemo
@@ -27,6 +31,7 @@ class MainActivity : ComponentActivity() {
 
     private val bitmapCompressor: BitmapCompressor by inject()
 
+    @OptIn(ExperimentalComposeUiApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -51,7 +56,7 @@ class MainActivity : ComponentActivity() {
                                 statusBarDark.toArgb()
                             )
                         },
-                        navigationBarStyle = if(!isDarkMode){
+                        navigationBarStyle = if (!isDarkMode) {
                             SystemBarStyle.light(
                                 navigationBarLight.toArgb(),
                                 navigationBarDark.toArgb()
@@ -65,8 +70,7 @@ class MainActivity : ComponentActivity() {
                 }
 
 
-
-  //              MainPageV2Screen()
+                //              MainPageV2Screen()
 
 //            Scaffold(
 //                bottomBar = {
@@ -140,7 +144,17 @@ class MainActivity : ComponentActivity() {
 //                )
 //            }
 
-                //     LazyListPerformanceDemo() // good for debouncer tests
+                Scaffold(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .semantics {
+                            testTagsAsResourceId = true // use with testTag mod
+                        }, // for UI tests
+                ) { innerPadding ->
+                    LazyListPerformanceDemo(
+                        Modifier.padding(innerPadding)
+                    ) // good for debouncer tests
+                }
 
 //            Scaffold(
 //                Modifier
@@ -161,16 +175,16 @@ class MainActivity : ComponentActivity() {
 //                    )
 //                }
 
+//                Scaffold(
+//                    Modifier
+//                        .fillMaxSize(),
+//                ) { padding ->
+//                    MovableContentDemo(
+//                        modifier = Modifier.padding(padding)
+//                    )
+//                }
 
-                Scaffold(
-                    Modifier
-                        .fillMaxSize(),
-                ) { padding ->
-                    MovableContentDemo(
-                        modifier = Modifier.padding(padding)
-                    )
-                }
-
+                //              DeferredStateReadsDemo()
 
             }
         }
