@@ -190,7 +190,7 @@ private data class DebouncedClickableElement(
         )
     }
 
-    override fun update(node: DebouncedClickableNode) {
+    override fun update(node: DebouncedClickableNode) { // or return Unit
         node.update(
             isEnabled = isEnabled,
             nodeCoroutineScope = coroutineScope,

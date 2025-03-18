@@ -15,6 +15,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import com.exsaw.composeplayground.features.animation.AnimLayoutLookaheadDemo
 import com.exsaw.composeplayground.features.animation.AnimVisibilityDemo
 import com.exsaw.composeplayground.features.internals.StabilityDemo
 import com.exsaw.composeplayground.features.performance.BitmapCompressor
@@ -66,9 +67,10 @@ class MainActivity : ComponentActivity() {
                 //              MainPageV2Screen()
 
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    AnimVisibilityDemo(
+                    AnimLayoutLookaheadDemo(
                         modifier = Modifier
-                            .consumeWindowInsets(innerPadding)
+                            .fillMaxSize()
+                            .padding(innerPadding)
                     )
                 }
 
