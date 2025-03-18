@@ -6,6 +6,7 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -14,6 +15,7 @@ import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import com.exsaw.composeplayground.features.animation.AnimVisibilityDemo
 import com.exsaw.composeplayground.features.internals.StabilityDemo
 import com.exsaw.composeplayground.features.performance.BitmapCompressor
 import com.exsaw.composeplayground.ui.theme.ComposePlaygroundTheme
@@ -61,132 +63,14 @@ class MainActivity : ComponentActivity() {
                     onDispose { }
                 }
 
-
                 //              MainPageV2Screen()
 
-//            Scaffold(
-//                bottomBar = {
-//                    CustomBottomNav()
-//                }
-//            ){}
-
-//            Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-//                SpacingModifierDemo(
-//                    modifier = Modifier
-//                        .consumeWindowInsets(innerPadding)
-//                )
-//            }
-
-//            SpacingModifierDemo(
-//                modifier = Modifier
-//                    .statusBarsPadding()
-//                    .navigationBarsPadding()
-//            )
-
-//            Scaffold(
-//                Modifier
-//                    .fillMaxSize(),
-//                contentWindowInsets = WindowInsets.navigationBars,
-//            ) { padding ->
-//                FocusManagementDemo(
-//                    modifier = Modifier
-//                        .padding(padding)
-//                )
-//            }
-
-//            Scaffold(
-//                Modifier
-//                    .fillMaxSize(),
-//            ) { padding ->
-//                LazyScrollingDemo(
-//                    modifier = Modifier
-//                        .padding(padding)
-//                )
-//            }
-
-//            Scaffold(
-//                modifier = Modifier
-//                    .fillMaxSize(),
-//            ) { padding ->
-//                val lazyLayout2dMapItems = remember {
-//                    defaultListOfLazyLayout2dMapItems
-//                }
-//                val lazyLayout2dMapOffset = remember {
-//                    mutableStateOf(IntOffset.Zero)
-//                }
-//                LazyLayout2dMapDemo(
-//                    modifier = Modifier
-//                        .fillMaxSize()
-//                        .padding(padding),
-//                    items = lazyLayout2dMapItems,
-//                    mapOffset = lazyLayout2dMapOffset.value,
-//                    onDrag = { offset ->
-//                        lazyLayout2dMapOffset.value += offset
-//                    }
-//                )
-//            }
-
-//            Scaffold(
-//                Modifier
-//                    .fillMaxSize(),
-//            ) { padding ->
-//                CoilImagesLoadingDemo(
-//                    modifier = Modifier
-//                        .padding(padding)
-//                )
-//            }
-
-//                Scaffold(
-//                    modifier = Modifier
-//                        .fillMaxSize()
-//                        .semantics {
-//                            testTagsAsResourceId = true // use with testTag mod
-//                        }, // for UI tests
-//                ) { innerPadding ->
-//                    LazyListPerformanceDemo(
-//                        Modifier.padding(innerPadding)
-//                    ) // good for debouncer tests
-//                }
-
-                Scaffold(
-                    modifier = Modifier
-                        .fillMaxSize()
-                ) { innerPadding ->
-                    StabilityDemo(
+                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    AnimVisibilityDemo(
                         modifier = Modifier
-                            .padding(innerPadding)
+                            .consumeWindowInsets(innerPadding)
                     )
                 }
-
-//            Scaffold(
-//                Modifier
-//                    .fillMaxSize(),
-//            ) { padding ->
-//                PhotoPickerScreen(
-//                    compressor = bitmapCompressor,
-//                    modifier = Modifier.padding(padding)
-//                )
-//            }
-
-//                Scaffold(
-//                    Modifier
-//                        .fillMaxSize(),
-//                ) { padding ->
-//                    KeyCustomLayoutDemo(
-//                        modifier = Modifier.padding(padding)
-//                    )
-//                }
-
-//                Scaffold(
-//                    Modifier
-//                        .fillMaxSize(),
-//                ) { padding ->
-//                    MovableContentDemo(
-//                        modifier = Modifier.padding(padding)
-//                    )
-//                }
-
-                //              DeferredStateReadsDemo()
 
             }
         }
