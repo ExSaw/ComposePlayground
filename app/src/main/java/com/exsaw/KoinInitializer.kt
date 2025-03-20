@@ -5,8 +5,9 @@ package com.exsaw
  */
 import android.content.Context
 import androidx.startup.Initializer
-import com.exsaw.composeplayground.features.state_managment.di.numberGuessScreenModule
 import com.exsaw.composeplayground.di.mainModule
+import com.exsaw.composeplayground.features.android_internals.service.di.musicServiceModule
+import com.exsaw.composeplayground.features.state_managment.di.numberGuessScreenModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.KoinApplication
@@ -27,6 +28,6 @@ class KoinInitializer : Initializer<KoinApplication> {
             androidLogger()
             allowOverride(false)
             androidContext(context)
-            modules(mainModule, numberGuessScreenModule)
+            modules(mainModule, numberGuessScreenModule, musicServiceModule)
         }
 }

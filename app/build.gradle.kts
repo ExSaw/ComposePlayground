@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose) // compose compiler
     alias(libs.plugins.baselineprofile)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -61,6 +62,10 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.kotlinx.coroutines.android)
 
+    // Nav
+    implementation(libs.navigation.compose)
+    implementation(libs.kotlinx.serialization.json)
+
     // Jetpack startup
     implementation(libs.jetpack.startup)
 
@@ -76,8 +81,10 @@ dependencies {
     // implementation(libs.koin.annotations)
     implementation(libs.koin.compose.viewmodel)
     implementation(libs.koin.compose.viewmodel.navigation)
-    implementation(libs.androidx.profileinstaller)
+    implementation(libs.koin.androidx.navigation)
 
+    // other
+    implementation(libs.androidx.profileinstaller)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
