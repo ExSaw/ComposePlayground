@@ -14,10 +14,7 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemColors
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,7 +35,7 @@ import org.koin.compose.KoinApplication
 
 @Composable
 fun BottomNavDemo1(modifier: Modifier = Modifier) {
-    var selectedItemIndex by rememberSaveable {
+    val selectedItemIndex = rememberSaveable {
         mutableIntStateOf(0)
     }
     Box(
@@ -65,9 +62,9 @@ fun BottomNavDemo1(modifier: Modifier = Modifier) {
                             verticalArrangement = Arrangement.Center
                         ) {
                             this@NavigationBar.NavigationBarItem(
-                                selected = selectedItemIndex == item.index,
-                                onClick =  {
-                                    selectedItemIndex = item.index
+                                selected = selectedItemIndex.intValue == item.index,
+                                onClick = onDebouncedClick {
+                                    selectedItemIndex.intValue = item.index
                                     // navController.navigate(...)
                                 },
                                 icon = {

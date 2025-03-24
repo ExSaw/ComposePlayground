@@ -2,7 +2,6 @@ package com.exsaw.composeplayground.util
 
 import androidx.compose.foundation.shape.GenericShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.Updater
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -18,6 +17,10 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavController
 import com.exsaw.composeplayground.tool.logUnlimited
 import org.koin.compose.viewmodel.koinViewModel
+
+val Dp.px: Float
+    @Composable
+    get() = with(LocalDensity.current) { this@px.toPx() }
 
 @Composable
 fun dpToSp(dp: Dp) = with(LocalDensity.current) { dp.toSp() }

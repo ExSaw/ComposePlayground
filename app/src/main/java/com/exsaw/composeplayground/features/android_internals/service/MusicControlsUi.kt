@@ -68,7 +68,7 @@ fun MusicControlsUiDemo(
         ) {
             Row(
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
             ) {
                 IconButton(
                     onClick = onDebouncedClick { musicController.previous()  }
@@ -83,6 +83,7 @@ fun MusicControlsUiDemo(
                     modifier = Modifier
                         .weight(1f)
                         .basicMarquee(), // autoScroll
+                    textAlign = TextAlign.Center
                 )
                 IconButton(
                     onClick = onDebouncedClick { musicController.next()  }
@@ -92,27 +93,27 @@ fun MusicControlsUiDemo(
                         contentDescription = "next"
                     )
                 }
-                Button(
-                    onClick = onDebouncedClick {
-                        if(isConnected) {
-                            musicController.unbind()
-                        } else {
-                            musicController.bind()
-                        }
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        contentColor = if(isConnected) {
-                            Colors.Bright.Red
-                        } else {
-                            Colors.Bright.Green
-                        }
-                    )
-                ) {
+            }
+            Button(
+                onClick = onDebouncedClick {
                     if(isConnected) {
-                        Text(text = "Disconnect",)
+                        musicController.unbind()
                     } else {
-                        Text(text = "Connect",)
+                        musicController.bind()
                     }
+                },
+                colors = ButtonDefaults.buttonColors(
+                    contentColor = if(isConnected) {
+                        Colors.Bright.Red
+                    } else {
+                        Colors.Bright.Green
+                    }
+                )
+            ) {
+                if(isConnected) {
+                    Text(text = "Disconnect",)
+                } else {
+                    Text(text = "Connect",)
                 }
             }
         }

@@ -17,10 +17,10 @@ import androidx.compose.ui.graphics.toArgb
 import com.exsaw.composeplayground.features.android_internals.custom_viewmodel.CustomViewModelProvider
 import com.exsaw.composeplayground.features.android_internals.custom_viewmodel.CustomViewModelStore
 import com.exsaw.composeplayground.features.android_internals.custom_viewmodel.MainCustomViewModel
-import com.exsaw.composeplayground.features.android_internals.service.MusicControlsUiDemo
 import com.exsaw.composeplayground.features.android_internals.service.MusicServiceController
 import com.exsaw.composeplayground.features.performance.BitmapCompressor
 import com.exsaw.composeplayground.ui.theme.ComposePlaygroundTheme
+import com.exsaw.composeplayground.util.view.LoadingPlaceholder
 import kotlinx.serialization.Serializable
 import org.koin.android.ext.android.inject
 
@@ -110,14 +110,10 @@ class MainActivity : ComponentActivity() {
                 // simple NAVIGATION
                 // AndroidInternalsCounterRoot()
 
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    MusicControlsUiDemo(
-                        musicController = musicServiceController,
-                        modifier = Modifier
-                            .fillMaxSize()
-                            .padding(innerPadding)
-                    )
-                }
+                // multi stack nav with bottomNav
+              //  MultiStackExampleScreenDemo()
+
+                Scaffold(Modifier.fillMaxSize()) { padding -> LoadingPlaceholder(Modifier.padding(padding)) }
 
 
             }  // end

@@ -2,6 +2,7 @@ package com.exsaw.composeplayground.di
 
 import com.exsaw.composeplayground.core.IDispatchersProvider
 import com.exsaw.composeplayground.core.StandardDispatchers
+import com.exsaw.composeplayground.features.navigation_multibackstack.BottomNavItemsHandler
 import com.exsaw.composeplayground.features.performance.BitmapCompressor
 import com.exsaw.composeplayground.tool.Vibrator
 import com.exsaw.composeplayground.viewmodel.MainViewModel
@@ -30,4 +31,6 @@ val mainModule = module {
         )
     }
     viewModel { MainViewModel(get()) }
+
+    factory { BottomNavItemsHandler(get()) }
 }
